@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  minimalemail:
+    image: ${DOCKER_REGISTRY-}minimalemail
+    build:
+      context: .
+      dockerfile: MinimalEmail/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - email-network
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: amqp
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    networks:
+      - email-network
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 15s
+      retries: 1
+
+networks:
+  email-network:
+    driver: bridge
