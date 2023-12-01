@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalEmail", "MinimalEmail\MinimalEmail.csproj", "{E4DF57DA-E7EA-43F9-A95C-924A0C4B1E3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalEmail", "MinimalEmail\MinimalEmail.csproj", "{E4DF57DA-E7EA-43F9-A95C-924A0C4B1E3C}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{03388F04-B0B5-45E4-9C34-413494643409}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailSender", "EmailSender\EmailSender.csproj", "{0F95D07E-AA1B-464D-9A13-9B313E489D9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrokerService", "BrokerService\BrokerService.csproj", "{46F6948E-54A6-4662-8EAB-87707D7C01AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{03388F04-B0B5-45E4-9C34-413494643409}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03388F04-B0B5-45E4-9C34-413494643409}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03388F04-B0B5-45E4-9C34-413494643409}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F95D07E-AA1B-464D-9A13-9B313E489D9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F95D07E-AA1B-464D-9A13-9B313E489D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F95D07E-AA1B-464D-9A13-9B313E489D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F95D07E-AA1B-464D-9A13-9B313E489D9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46F6948E-54A6-4662-8EAB-87707D7C01AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F6948E-54A6-4662-8EAB-87707D7C01AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F6948E-54A6-4662-8EAB-87707D7C01AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F6948E-54A6-4662-8EAB-87707D7C01AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -31,6 +31,19 @@ services:
       timeout: 15s
       retries: 1
 
+  emailsender:
+    image: ${DOCKER_REGISTRY-}emailsender
+    build:
+      context: .
+      dockerfile: EmailSender/Dockerfile
+    ports:
+      - "8083:8083"
+      - "8082:8082"
+    networks:
+      - email-network
+    depends_on:
+      - rabbitmq
+
 networks:
   email-network:
     driver: bridge

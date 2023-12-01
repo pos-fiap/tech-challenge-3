@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace TechChallenge.Application.BaseResponse
+namespace MinimalEmail.BaseResponse
 {
     public class Response
     {

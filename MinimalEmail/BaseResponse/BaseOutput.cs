@@ -1,4 +1,4 @@
-﻿namespace TechChallenge.Application.BaseResponse
+﻿namespace MinimalEmail.BaseResponse
 {
     public class BaseOutput<T> : Response
     {

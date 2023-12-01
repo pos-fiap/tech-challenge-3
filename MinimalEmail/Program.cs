@@ -1,9 +1,6 @@
+using BrokerService;
 using Microsoft.AspNetCore.Mvc;
-using MinimalEmail;
-using RabbitMQ.Client;
-using System.Text;
-using System.Text.Json;
-using TechChallenge.Application.BaseResponse;
+using MinimalEmail.BaseResponse;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +24,8 @@ app.MapPost("/send", ([FromBody] EmailDto email) =>
 
     try
     {
-        RabbitMQSender rabbitMQSender = new();
-        rabbitMQSender.SendEmail(email);
+        RabbitMQService rabbitMQSender = new("RabbitMQ .NET 8 Sender App");
+        rabbitMQSender.SendEmailToQueue(email);
     }
     catch (Exception ex)
     {
