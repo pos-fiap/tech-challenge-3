@@ -12,10 +12,13 @@ namespace BrokerService
         private readonly IConnection _cnn;
         private readonly IModel _channel;
         private readonly ConnectionFactory _factory;
+
+        const string EXCHANGE_NAME = "email-exchange";
+        const string ROUTING_KEY = "email-routing-key";
+        const string QUEUE_NAME = "email-queue";
+
         public RabbitMQService(string clientProvidedName)
         {
-            //docker run -d --hostname rmq --name rabbit-server -p 8080:15672 -p 5672:5672 rabbitmq:3-management
-
             _factory = new()
             {
                 Uri = new Uri("amqp://guest:guest@rabbitmq:5672"),
@@ -24,19 +27,15 @@ namespace BrokerService
 
             _cnn = _factory.CreateConnection();
             _channel = _cnn.CreateModel();
+
+            _channel.ExchangeDeclare(EXCHANGE_NAME, ExchangeType.Direct);
+            _channel.QueueDeclare(QUEUE_NAME, false, false, false, null);
+            _channel.QueueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTING_KEY, null);
         }
         public void SendEmailToQueue(EmailDto email)
         {
-            string exchangeName = "email-exchange";
-            string routingKey = "email-routing-key";
-            string queueName = "email-queue";
-
-            _channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
-            _channel.QueueDeclare(queueName, false, false, false, null);
-            _channel.QueueBind(queueName, exchangeName, routingKey, null);
-
             byte[] messageBody = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(email));
-            _channel.BasicPublish(exchangeName, routingKey, null, messageBody);
+            _channel.BasicPublish(EXCHANGE_NAME, ROUTING_KEY, null, messageBody);
 
             _channel.Close();
             _cnn.Close();
@@ -44,13 +43,6 @@ namespace BrokerService
 
         public void ReceiveEmailAndSend(string emailHost, string emailHostPassword)
         {
-            string exchangeName = "email-exchange";
-            string routingKey = "email-routing-key";
-            string queueName = "email-queue";
-
-            _channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
-            _channel.QueueDeclare(queueName, false, false, false, null);
-            _channel.QueueBind(queueName, exchangeName, routingKey, null);
             _channel.BasicQos(0, 1, false);
 
             var consumer = new EventingBasicConsumer(_channel);
@@ -76,12 +68,9 @@ namespace BrokerService
                 _channel.BasicAck(eventArgs.DeliveryTag, false);
             };
 
-            _channel.BasicConsume(queueName, true, consumer);
+            _channel.BasicConsume(QUEUE_NAME, true, consumer);
 
             Console.ReadLine();
-
-            _channel.Close();
-            _cnn.Close();
         }
 
         private static void SendEmail(EmailDto email, string emailHost, string emailHostPassword)
