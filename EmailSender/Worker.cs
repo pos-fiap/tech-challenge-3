@@ -11,6 +11,7 @@ namespace EmailSender
         private readonly string _emailHostPassword;
         private bool _disposed = false;
         private readonly AppDbContext _appDbContext;
+        private RabbitMQService _rabbitMqService;
 
         public Worker(IConfiguration configuration, AppDbContext appDbContext)
         {
@@ -18,6 +19,8 @@ namespace EmailSender
             _emailHost = _configuration["emailHost"];
             _emailHostPassword = _configuration["emailHostPassword"];
             _appDbContext = appDbContext;
+            _rabbitMqService = new RabbitMQService("RabbitMQ .NET 8 Sender App");
+
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -35,8 +38,7 @@ namespace EmailSender
                 _appDbContext.Log.Add(log);
                 _appDbContext.SaveChanges();
 
-                RabbitMQService rabbitService = new RabbitMQService("RabbitMQ .NET 8 Sender App");
-                rabbitService.ReceiveEmailAndSend(_emailHost, _emailHostPassword);
+                _rabbitMqService.ReceiveEmailAndSend(_emailHost, _emailHostPassword);
             }
         }
 

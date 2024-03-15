@@ -36,9 +36,6 @@ namespace BrokerService
         {
             byte[] messageBody = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(email));
             _channel.BasicPublish(EXCHANGE_NAME, ROUTING_KEY, null, messageBody);
-
-            _channel.Close();
-            _cnn.Close();
         }
 
         public void ReceiveEmailAndSend(string emailHost, string emailHostPassword)
