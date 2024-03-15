@@ -1,4 +1,6 @@
 ﻿using BrokerService;
+using EmailSender.Context;
+using EmailSender.Model;
 
 namespace EmailSender
 {
@@ -8,11 +10,14 @@ namespace EmailSender
         private readonly string _emailHost;
         private readonly string _emailHostPassword;
         private bool _disposed = false;
-        public Worker(IConfiguration configuration)
+        private readonly AppDbContext _appDbContext;
+
+        public Worker(IConfiguration configuration, AppDbContext appDbContext)
         {
             _configuration = configuration;
             _emailHost = _configuration["emailHost"];
             _emailHostPassword = _configuration["emailHostPassword"];
+            _appDbContext = appDbContext;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -26,6 +31,10 @@ namespace EmailSender
         {
             while (!cancellationToken.IsCancellationRequested)
             {
+                var log = new Log { Content = $"Email sent to {_emailHost}" };
+                _appDbContext.Log.Add(log);
+                _appDbContext.SaveChanges();
+
                 RabbitMQService rabbitService = new RabbitMQService("RabbitMQ .NET 8 Sender App");
                 rabbitService.ReceiveEmailAndSend(_emailHost, _emailHostPassword);
             }
